@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -217,52 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
         "menu__item"
     ).render();
 
-    // отправка форм POST запросом, когда данные отправляются в обычно формате
-
-    // const forms = document.querySelectorAll('form');
-
-    // const message = {
-    //     loading: 'Загрузка...',
-    //     success: 'Спасибо! Скоро с вами свяжемся',
-    //     failure: 'Что-то пошло не так!'
-    // };
-
-    // forms.forEach(item => {
-    //     postData(item);
-    // });
-
-    // function postData(form) {
-    //     form.addEventListener('submit', (e) => {
-    //         e.preventDefault();
-
-    //         let statusMessage = document.createElement('div');
-    //         statusMessage.classList.add('status');
-    //         statusMessage.textContent = message.loading;
-    //         form.append(statusMessage);
-
-    //         const request = new XMLHttpRequest();
-    //         request.open('POST', 'mailer/server.php');
-
-    //         // request.setRequestHeader('Content-type', 'multipart/form-data');
-    //         const formData = new FormData(form);
-
-    //         request.send(formData);
-
-    //         request.addEventListener('load', () => {
-    //             if (request.status === 200) {
-    //                 console.log(request.response);
-    //                 statusMessage.textContent = message.success;
-    //                 form.reset();
-    //                 setTimeout(() => {
-    //                     statusMessage.remove();
-    //                 }, 3000);
-    //             } else {
-    //                 statusMessage.textContent = message.failure;
-    //             }
-    //         });
-    //     });
-    // }
-
 // отправка форм POST запросом, когда данные отправляются в формате JSON
 
     const forms = document.querySelectorAll('form');
@@ -290,10 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             form.insertAdjacentElement('afterend', statusMessage);
 
-            const request = new XMLHttpRequest();
-            request.open('POST', 'mailer/server.php');
-
-            request.setRequestHeader('Content-type', 'application/json');
             const formData = new FormData(form);
 
             const object = {};
@@ -303,18 +253,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const json = JSON.stringify(object);
 
-            request.send(json);
-
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
-                    showThanksModal(message.success);
-                    form.reset();
-                    statusMessage.remove();
-                } else {
-                    showThanksModal(message.failure);
-                    form.reset();
+            fetch('mailer/server.php', {
+                method: "POST",
+                body: json,
+                headers: {
+                    'Content-type': 'application/json'
                 }
+            })
+            .then(data => data.text())
+            .then(data => {
+                console.log(data);
+                showThanksModal(message.success);
+                statusMessage.remove();
+            }).catch(() => {
+                showThanksModal(message.failure);
+            }).finally(() => {
+                form.reset();
             });
         });
     }
@@ -344,4 +298,5 @@ document.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }, 4000);
     }
+
 });
