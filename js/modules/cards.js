@@ -1,3 +1,5 @@
+import {getResourses} from '../services/services';
+
 function cards() {
     // Использование классов для карточек
 
@@ -42,17 +44,6 @@ function cards() {
         }
     }
 
-    // Функция getResourses для передачи данных с сервера для создания карточек   
-    const getResourses = async (url) => {
-        const resull = await fetch(url);
-
-        if (!resull.ok) { //блок ошибки записываем в ручную
-            throw new Error(`Could not fetch ${url}, status ${resull.status}`);
-        }
-
-        return await resull.json();
-    };
-
     getResourses('http://localhost:3000/menu')
     .then(data => {
         data.forEach(({img, altimg, title, descr, price}) => {       // {}- деструктуризация обьекта, берем только значения
@@ -61,4 +52,4 @@ function cards() {
     });
 }
 
-module.exports = cards;
+export default cards;

@@ -1,4 +1,4 @@
-function calculator() {
+function calc() {
     // Calorie calculator
 
     const result = document.querySelector('.calculating__result span');
@@ -110,4 +110,4 @@ function calculator() {
     getDynamicInfo('#age');
 }
 
-module.exports = calculator;
+export default calc;

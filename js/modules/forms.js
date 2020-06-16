@@ -1,7 +1,10 @@
-function forms() {
+import {openModal, closeModal} from './modal';
+import {postData} from '../services/services';
+
+function forms(formSelector,modalTimerId) {
     // отправка форм POST запросом, когда данные отправляются в формате JSON
 
-    const forms = document.querySelectorAll('form');
+    const forms = document.querySelectorAll(formSelector);
 
     const message = {
         loading: 'img/form/spiner.svg',
@@ -12,18 +15,6 @@ function forms() {
     forms.forEach(item => {
         bindPostData(item);
     });
-// Функция postData для поста данных с различными аргументами
-    const postData = async (url, data) => {
-        const resull = await fetch(url, {
-            method: "POST",
-            body: data,
-            headers: {
-                'Content-type': 'application/json'
-            }
-        });
-
-        return await resull.json();
-    };
 
     function bindPostData(form) {
         form.addEventListener('submit', (e) => {
@@ -40,7 +31,7 @@ function forms() {
 
             const formData = new FormData(form);
 
-//Берем formData превращаем в масив масивов, превращаем в обьект, а потом в json
+ //Берем formData превращаем в масив масивов, превращаем в обьект, а потом в json
             const json = JSON.stringify(Object.fromEntries(formData.entries())); 
 
             postData('http://localhost:3000/requests', json)
@@ -62,7 +53,7 @@ function forms() {
         const prevModalDialog = document.querySelector('.modal__dialog');
 
         prevModalDialog.classList.add('hide');
-        openModal();
+        openModal('.modal', modalTimerId);
 
         const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
@@ -78,9 +69,9 @@ function forms() {
             thanksModal.remove();
             prevModalDialog.classList.add('show');
             prevModalDialog.classList.remove('hide');
-            closeModal();
+            closeModal('.modal');
         }, 4000);
     }
 }
 
-module.exports = forms;
+export default forms;

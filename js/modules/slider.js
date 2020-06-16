@@ -1,27 +1,26 @@
-function slider() {
+function slider({container, slide, nextArrow, prevArrow, totalCounter, currentCounter, wrapper, field}) {
     // Slider carusel
 
-    const slides = document.querySelectorAll('.offer__slide'),
-    slider = document.querySelector('.offer__slider'),
-    prev = document.querySelector('.offer__slider-prev'),
-    next = document.querySelector('.offer__slider-next'),
-    total = document.querySelector('#total'),
-    current = document.querySelector('#current'),
-    slidesWrapper = document.querySelector('.offer__slider-wrapper'),
-    slidesField = document.querySelector('.offer__slider-inner'),
-    width = window.getComputedStyle(slidesWrapper).width;
+    const slides = document.querySelectorAll(slide),
+          slider = document.querySelector(container),
+          prev = document.querySelector(prevArrow),
+          next = document.querySelector(nextArrow),
+          total = document.querySelector(totalCounter),
+          current = document.querySelector(currentCounter),
+          slidesWrapper = document.querySelector(wrapper),
+          slidesField = document.querySelector(field),
+          width = window.getComputedStyle(slidesWrapper).width;
 
     let slideIndex = 1;
     let offset = 0;
 
     if (slides.length < 10) {
-    total.textContent = `0${slides.length}`;
-    current.textContent = `0${slideIndex}`;
+        total.textContent = `0${slides.length}`;
+        current.textContent = `0${slideIndex}`;
     } else {
-    total.textContent = slides.length;
-    current.textContent = slideIndex;
+        total.textContent = slides.length;
+        current.textContent = slideIndex;
     }
-
 
     function showZeroCurrent() {
         if (slides.length < 10) {
@@ -44,7 +43,7 @@ function slider() {
     slider.style.position = 'relative';
 
     const indicotor = document.createElement('ol'),
-        dots = [];
+          dots = [];
 
     indicotor.classList.add('carousel-indicators');
     indicotor.style.cssText = `
@@ -154,4 +153,4 @@ function slider() {
     });
 }
 
-module.exports = slider;
+export default slider;
